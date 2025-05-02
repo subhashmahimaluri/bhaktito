@@ -1,3 +1,5 @@
+import PanchangamTable from "@/components/PanchangamTable";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -7,6 +9,7 @@ export default function Home() {
       <p className="mt-4 text-lg text-gray-600">
         Your daily spiritual calendar and insights.
       </p>
+      <PanchangamTable />
     </main>
   );
 }
