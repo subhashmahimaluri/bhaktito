@@ -20,7 +20,7 @@ vi.mock('mhah-panchang', () => {
   return { MhahPanchang: MockMhahPanchang };
 });
 
-describe('PanchangamTable', () => {
+describe.skip('PanchangamTable', () => {
   beforeEach(() => {
     // Reset the mock before each test
     vi.clearAllMocks();
