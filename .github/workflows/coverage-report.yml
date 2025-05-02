@@ -4,24 +4,31 @@ on:
   pull_request_target:
     branches:
       - main
+
 jobs:
   vitest-coverage:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout PR branch
+      # ✅ Checkout PR code explicitly (not default main)
+      - name: Checkout PR code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
+      # ✅ Setup Node environment
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # ✅ Install dependencies
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      # ✅ Run coverage on PR
       - name: Run coverage on PR
         run: yarn test:coverage
 
@@ -30,6 +37,7 @@ jobs:
           mkdir -p pr-coverage
           cp coverage/coverage-summary.json pr-coverage/
 
+      # ✅ Checkout main to compare base coverage
       - name: Checkout main branch
         run: |
           git fetch origin main
@@ -46,6 +54,7 @@ jobs:
           mkdir -p base-coverage
           cp coverage/coverage-summary.json base-coverage/
 
+      # ✅ Run PR Coverage Insight Action with GH token
       - name: Run vite-pr-coverage-insight action
         uses: subhashmahimaluri/vite-pr-coverage-insight@main
         with:
