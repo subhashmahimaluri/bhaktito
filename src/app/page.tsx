@@ -1,3 +1,4 @@
+import Link from "next/link";
 import PanchangamTable from "../components/PanchangamTable";
 
 export default function Home() {
@@ -10,6 +11,19 @@ export default function Home() {
         Your daily spiritual calendar and insights.
       </p>
       <PanchangamTable />
+
+      <h2 className="text-3xl font-bold mb-6 text-center">📿 Bhaktito Stotras</h2>
+
+      <ul className="space-y-4">
+        <li>
+          <Link
+            href="/stotras/sri-narasimha-dwadasa-nama-stotram"
+            className="block border p-4 rounded shadow hover:bg-gray-50 transition"
+          >
+            శ్రీ నృసింహ ద్వాదశనామ స్తోత్రం
+          </Link>
+        </li>
+      </ul>
     </main>
   );
 }
