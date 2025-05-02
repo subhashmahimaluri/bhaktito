@@ -24,10 +24,10 @@ vi.mock("fs/promises", async () => {
 });
 
 describe("StotraPage", () => {
-//   it("renders the correct stotra based on slug", async () => {
-//     render(await StotraPage({ params: { slug: "sri-narasimha-dwadasa-nama-stotram" } }));
+  it.skip("renders the correct stotra based on slug", async () => {
+    render(await StotraPage({ params: { slug: "sri-narasimha-dwadasa-nama-stotram" } }));
 
-//     expect(await screen.findByText("శ్రీ నృసింహ ద్వాదశనామ స్తోత్రం")).toBeInTheDocument();
-//     expect(await screen.findByText(/అస్య శ్రీనృసింహ ద్వాదశనామస్తోత్ర/)).toBeInTheDocument();
-//   });
+    expect(await screen.findByText("శ్రీ నృసింహ ద్వాదశనామ స్తోత్రం")).toBeInTheDocument();
+    expect(await screen.findByText(/అస్య శ్రీనృసింహ ద్వాదశనామస్తోత్ర/)).toBeInTheDocument();
+  });
 });
