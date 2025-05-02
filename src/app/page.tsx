@@ -1,4 +1,4 @@
-import PanchangamTable from "@/components/PanchangamTable";
+import PanchangamTable from "../components/PanchangamTable";
 
 export default function Home() {
   return (

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import PanchangamTable from '@/components/PanchangamTable';
+import PanchangamTable from '../PanchangamTable';
 
 describe('PanchangamTable', () => {
   it('renders the title', () => {
