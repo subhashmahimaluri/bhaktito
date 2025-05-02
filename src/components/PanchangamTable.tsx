@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MhahPanchang } from 'mhah-panchang';
 
 type PanchangamItem = {
@@ -15,18 +15,19 @@ export default function PanchangamTable() {
     const calculatePanchangam = () => {
       try {
         const today = new Date();
-        const latitude = 12.9716; // Bengaluru Latitude
-        const longitude = 77.5946; // Bengaluru Longitude
+        const latitude = 17.385044; // Hyderabad
+        const longitude = 78.486671;
 
         const obj = new MhahPanchang();
-        const panchang = obj.calendar(today, latitude, longitude);
+        const p = obj.calendar(today, latitude, longitude);
 
         const data: PanchangamItem[] = [
-          { label: 'తిథి', value: panchang.Tithi?.name_en_IN || 'N/A' },
-          { label: 'నక్షత్రం', value: panchang.Nakshatra?.name_en_IN || 'N/A' },
-          { label: 'యోగం', value: panchang.Yoga?.name_en_IN || 'N/A' },
-          { label: 'కరణం', value: panchang.Karna?.name_en_IN || 'N/A' },
+          { label: 'తిథి', value: p.Tithi?.name_en_IN || p.Tithi?.name_en_IN || 'N/A' },
+          { label: 'నక్షత్రం', value: p.Nakshatra?.name_en_IN || 'N/A' },
+          { label: 'యోగం', value: p.Yoga?.name_en_IN || 'N/A' },
+          { label: 'కరణం', value: p.Karna?.name_en_IN || 'N/A' },
         ];
+
         setPanchangamData(data);
       } catch (error) {
         console.error("Error calculating Panchangam:", error);
