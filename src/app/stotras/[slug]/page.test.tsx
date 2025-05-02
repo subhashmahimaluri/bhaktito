@@ -24,7 +24,7 @@ vi.mock("fs/promises", async () => {
 });
 
 describe("StotraPage", () => {
-  it.skip("renders the correct stotra based on slug", async () => {
+  it("renders the correct stotra based on slug", async () => {
     render(await StotraPage({ params: { slug: "sri-narasimha-dwadasa-nama-stotram" } }));
 
     expect(await screen.findByText("శ్రీ నృసింహ ద్వాదశనామ స్తోత్రం")).toBeInTheDocument();
