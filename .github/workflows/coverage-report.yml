@@ -48,7 +48,7 @@ jobs:
           cp coverage/coverage-summary.json base-coverage/
 
       - name: Run vite-pr-coverage-insight action
-        uses: <your-username>/vite-pr-coverage-insight@main
+        uses: subhashmahimaluri/vite-pr-coverage-insight@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base: base-coverage/coverage-summary.json
