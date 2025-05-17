@@ -61,3 +61,4 @@ jobs:
           github-token: ${{ secrets.GH_BOT_TOKEN }}
           base: base-coverage/coverage-summary.json
           head: pr-coverage/coverage-summary.json
+          cache-buster: ${{ github.run_id }}
