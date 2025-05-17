@@ -41,7 +41,7 @@ export default function PanchangamTable() {
   return (
     <div className="p-4 border rounded shadow-sm bg-white">
       <h2 className="text-xl font-bold mb-4">📅 పంచాంగం</h2>
-      <h4>Telugu Panchangam</h4>
+      <h4>Telugu Panchangam New</h4>
       <table className="w-full text-sm">
         <tbody>
           {panchangamData.map((item, index) => (
