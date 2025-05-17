@@ -56,7 +56,7 @@ jobs:
 
       # ✅ Run PR Coverage Insight Action with GH token
       - name: Run vite-pr-coverage-insight action
-        uses: subhashmahimaluri/react-unit-test-pr-coverage-report@main
+        uses: subhashmahimaluri/vite-pr-coverage-insight@v1.2.9
         with:
           github-token: ${{ secrets.GH_BOT_TOKEN }}
           base: base-coverage/coverage-summary.json
