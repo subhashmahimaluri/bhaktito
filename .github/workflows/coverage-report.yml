@@ -35,7 +35,12 @@ jobs:
         if: always()
         run: |
           mkdir -p pr-coverage
-          cp coverage/coverage-summary.json pr-coverage/
+          if [ -f coverage/coverage-summary.json ]; then
+            cp coverage/coverage-summary.json pr-coverage/
+          else
+            echo '{}' > pr-coverage/coverage-summary.json
+            echo "⚠️ Created empty coverage file as tests failed"
+          fi
 
       - name: Checkout main branch
         run: |
