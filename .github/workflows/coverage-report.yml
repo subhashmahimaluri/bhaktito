@@ -54,12 +54,12 @@ jobs:
           cp coverage/coverage-summary.json base-coverage/
 
       - name: Run vite-pr-coverage-insight action
-        uses: subhashmahimaluri/vite-pr-coverage-insight@v1.3.0
+        uses: subhashmahimaluri/vite-pr-coverage-insight@v1.3.1
         if: always()
         with:
           github-token: ${{ secrets.GH_BOT_TOKEN }}
           base: base-coverage/coverage-summary.json
           head: pr-coverage/coverage-summary.json
           test-failures: test-failures.json
-          force-continue: true
+          use-check-run: true
           cache-buster: ${{ github.run_id }}
