@@ -59,7 +59,7 @@ jobs:
           cp coverage/coverage-summary.json base-coverage/
 
       - name: Run vite-pr-coverage-insight action
-        uses: subhashmahimaluri/vite-pr-coverage-insight@v1.3.3
+        uses: subhashmahimaluri/vite-pr-coverage-insight@main
         if: always()
         with:
           github-token: ${{ secrets.GH_BOT_TOKEN }}
