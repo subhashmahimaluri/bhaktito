@@ -1,5 +1,7 @@
 import Link from "next/link";
 import PanchangamTable from "../components/PanchangamTable";
+import PanchangamTableHindi from "../components/PanchangamTableHindi";
+import PanchangamTableNew from "../components/PanchangamTableNew";
 
 export default function Home() {
   return (
@@ -11,6 +13,8 @@ export default function Home() {
         Your daily spiritual calendar and insights.
       </p>
       <PanchangamTable />
+      <PanchangamTableNew />
+      <PanchangamTableHindi />
 
       <h2 className="text-3xl font-bold mb-6 text-center">📿 Bhaktito Stotras</h2>
 
