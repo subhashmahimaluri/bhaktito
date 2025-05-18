@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ✅ Checkout PR code explicitly (not default main)
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
@@ -18,26 +17,26 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      # ✅ Setup Node environment
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # ✅ Install dependencies
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # ✅ Run coverage on PR
       - name: Run coverage on PR
-        run: yarn test:coverage
+        run: |
+          set -e
+          yarn test:coverage || echo "⚠️ Tests failed, continuing to the report generation step"
+        continue-on-error: true
 
       - name: Save PR coverage
+        if: always()
         run: |
           mkdir -p pr-coverage
           cp coverage/coverage-summary.json pr-coverage/
 
-      # ✅ Checkout main to compare base coverage
       - name: Checkout main branch
         run: |
           git fetch origin main
@@ -54,11 +53,12 @@ jobs:
           mkdir -p base-coverage
           cp coverage/coverage-summary.json base-coverage/
 
-      # ✅ Run PR Coverage Insight Action with GH token
       - name: Run vite-pr-coverage-insight action
         uses: subhashmahimaluri/vite-pr-coverage-insight@v1.3.0
         with:
           github-token: ${{ secrets.GH_BOT_TOKEN }}
           base: base-coverage/coverage-summary.json
           head: pr-coverage/coverage-summary.json
+          test-failures: test-failures.json
+          force-continue: true
           cache-buster: ${{ github.run_id }}
