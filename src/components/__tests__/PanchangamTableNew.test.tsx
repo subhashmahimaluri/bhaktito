@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import PanchangamTableKannada from '../PanchangamTablekannada';
+import PanchangamTableNew from '../PanchangamTableNew';
 import { MhahPanchang } from 'mhah-panchang';
 import { vi } from 'vitest';
 
@@ -20,21 +20,21 @@ vi.mock('mhah-panchang', () => {
   return { MhahPanchang: MockMhahPanchang };
 });
 
-describe('PanchangamTableKannada', () => {
+describe('PanchangamTableNew', () => {
   beforeEach(() => {
     // Reset the mock before each test
     vi.clearAllMocks();
   });
 
   it('renders the title', async () => {
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('📅 పంచాంగం')).toBeInTheDocument();
     });
   });
 
   it('renders all expected row labels', async () => {
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('తిథి')).toBeInTheDocument();
       expect(screen.getByText('నక్షత్రం')).toBeInTheDocument();
@@ -44,7 +44,7 @@ describe('PanchangamTableKannada', () => {
   });
 
   it('renders the calculated panchangam values', async () => {
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('Mock Tithi')).toBeInTheDocument();
       expect(screen.getByText('Mock Nakshatra')).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe('PanchangamTableKannada', () => {
       } as any; // Use 'as any' to bypass type checking for the mock implementation
     });
 
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
 
     await waitFor(() => {
       expect(screen.getByText('Error')).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('PanchangamTableKannada', () => {
         }),
       } as any;
     });
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('తిథి')).toBeInTheDocument();
       expect(screen.getByText('N/A')).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('PanchangamTableKannada', () => {
         }),
       } as any;
     });
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('నక్షత్రం')).toBeInTheDocument();
       expect(screen.getByText('N/A')).toBeInTheDocument();
@@ -124,7 +124,7 @@ describe('PanchangamTableKannada', () => {
         }),
       } as any;
     });
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('యోగం')).toBeInTheDocument();
       expect(screen.getByText('N/A')).toBeInTheDocument();
@@ -142,7 +142,7 @@ describe('PanchangamTableKannada', () => {
         }),
       } as any;
     });
-    render(<PanchangamTableKannada />);
+    render(<PanchangamTableNew />);
     await waitFor(() => {
       expect(screen.getByText('కరణం')).toBeInTheDocument();
       expect(screen.getByText('N/A')).toBeInTheDocument();

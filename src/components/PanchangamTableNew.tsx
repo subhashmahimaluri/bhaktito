@@ -8,7 +8,7 @@ type PanchangamItem = {
   value: string;
 };
 
-export default function PanchangamTableKannada() {
+export default function PanchangamTableNew() {
   const [panchangamData, setPanchangamData] = useState<PanchangamItem[]>([]);
 
   useEffect(() => {
