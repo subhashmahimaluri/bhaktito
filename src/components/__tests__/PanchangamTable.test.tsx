@@ -120,7 +120,7 @@ describe('PanchangamTable', () => {
           Tithi: { name_en_IN: 'Mock Tithi' },
           Nakshatra: { name_en_IN: 'Mock Nakshatra' },
           Yoga: { name_en_IN: null },
-          Karna: { name_en_IN: 'Mock Karna' },
+          Karna: { name_en_IN: 'Mock Karn' },
         }),
       } as any;
     });
