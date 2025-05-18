@@ -55,6 +55,7 @@ jobs:
 
       - name: Run vite-pr-coverage-insight action
         uses: subhashmahimaluri/vite-pr-coverage-insight@v1.3.0
+        if: always()
         with:
           github-token: ${{ secrets.GH_BOT_TOKEN }}
           base: base-coverage/coverage-summary.json
