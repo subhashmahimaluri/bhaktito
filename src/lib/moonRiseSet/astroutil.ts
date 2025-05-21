@@ -1,110 +1,90 @@
-
-export const deg2rad = Math.PI / 180.
+export const deg2rad = Math.PI / 180;
+export const rad2deg = 180.0 / Math.PI;
 
 /**
- * Radian to degree conversion
+ * @param a angle in degrees
+ * @returns Sine of angle
  */
-export const rad2deg = 180.0 / Math.PI
+export const sind = (a: number): number => Math.sin(a * deg2rad);
 
 /**
- * 
- * @param {Number} a angle in degrees 
- * @returns Sin of angle
- */
-export const sind = (a) => Math.sin(a * deg2rad)
-
-/**
- * 
- * @param {Number} a angle in degrees
+ * @param a angle in degrees
  * @returns Tangent of angle
  */
-export const tand = (a) => Math.tan(a * deg2rad)
-
-
-/**
- * 
- * @param {Number} a angle in degrees 
- * @returns Cos of angle
- */
-export const cosd = (a) => Math.cos(a * deg2rad)
+export const tand = (a: number): number => Math.tan(a * deg2rad);
 
 /**
- * 
- * @param {Array} a 1st Vector for cross product
- * @param {Array} b 2nd vector for cross product 
- * @returns cross product of a & b
+ * @param a angle in degrees
+ * @returns Cosine of angle
  */
-export const cross = (a, b) => {
-    let c = [0, 0, 0]
-    c[0] = a[1] * b[2] - a[2] * b[1]
-    c[1] = a[2] * b[0] - a[0] * b[2]
-    c[2] = a[0] * b[1] - a[1] * b[0]
-    return c
+export const cosd = (a: number): number => Math.cos(a * deg2rad);
+
+/**
+ * Cross product of two 3-element vectors
+ */
+export const cross = (a: number[], b: number[]): number[] => {
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ];
+};
+
+/**
+ * Dot product of two vectors
+ */
+export const dot = (v1: number[], v2: number[]): number => {
+  return v1.reduce((c, v, idx) => c + v * v2[idx], 0);
+};
+
+/**
+ * Element-wise addition of two vectors
+ */
+export const eadd = (v1: number[], v2: number[]): number[] => {
+  return v1.map((v, idx) => v + v2[idx]);
+};
+
+// -------- Array prototype extensions --------
+
+declare global {
+  interface Array<T> {
+    normsq(): number;
+    norm(): number;
+    normalize(): number[];
+  }
+}
+
+if (!Array.prototype.normsq) {
+  Array.prototype.normsq = function (): number {
+    return this.reduce((c: number, v: number) => c + v * v, 0);
+  };
+}
+
+if (!Array.prototype.norm) {
+  Array.prototype.norm = function (): number {
+    return Math.sqrt(this.normsq());
+  };
+}
+
+if (!Array.prototype.normalize) {
+  Array.prototype.normalize = function (): number[] {
+    const n = this.norm();
+    return this.map((v: number) => v / n);
+  };
 }
 
 /**
- * 
- * @param v1 vector 1
- * @param v2 vector 2
- * @returns vector dot product
+ * Calculates angle (in radians) between two vectors
  */
-export const dot = (v1, v2) => {
-    return v1.reduce((c, v, idx) => { return c + v * v2[idx] }, 0)
-}
+export const angleBetweenVectors = (v1: number[], v2: number[]): number => {
+  const normprod = v1.norm() * v2.norm();
+  const crossnorm = cross(v1, v2).norm() / normprod;
+  const cdot = dot(v1, v2) / normprod;
 
-/**
- * 
- * @param v1 vector 1
- * @param v2 vector 2
- * @returns vector with element-wise addition of 2 vectors
- */
-export const eadd = (v1, v2) => {
-    return v1.map((v, idx) => v + v2[idx])
-}
+  let theta = Math.asin(crossnorm);
+  if (cdot < 0) {
+    theta = Math.PI - theta;
+  }
 
-
-/**
- * 
- * @returns Norm squared of vector (sum of square of elements)
- */
-Array.prototype.normsq = function () {
-    return this.reduce((c, v) => {
-        return c + v * v
-    }, 0)
-}
-
-/**
- * 
- * @returns Vector norm of array
- */
-Array.prototype.norm = function () {
-    return Math.sqrt(this.normsq())
-}
-
-/**
- * 
- * @returns Normalized version of array
- */
-Array.prototype.normalize = function () {
-    let n = this.norm()
-    return this.map((v) => {
-        return v / n
-    })
-}
-
-/**
- * 
- * @param {Array} v1 Vector 1, a 3-element vector
- * @param {Array} v2 Vector 2, a 3-element vector
- * @returns Angle in radians between v1 and v2
- */
-export const angleBetweenVectors = (v1, v2) => {
-    let normprod = v1.norm() * v2.norm()
-    let crossnorm = cross(v1, v2).norm() / normprod
-    let cdot = dot(v1, v2) / normprod
-    let theta = Math.asin(crossnorm)
-    if (cdot < 0) {
-        theta = Math.PI - theta
-    }
-    return theta
-}
+  return theta;
+};
