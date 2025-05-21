@@ -24,3 +24,153 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Panchangam Box Container */
+.panchang-box-details {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid #e5e7eb; /* light gray border */
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-top: 1.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+}
+
+/* Section Block */
+.panchang-box-data-block {
+  margin-bottom: 1.5rem;
+}
+
+/* Section Title */
+.panchang-box-data-block > .block,
+.panchang-box-data-block > span.d-block {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* List Styling */
+.panchang-box-data-block ol {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.panchang-box-data-block li {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.panchang-box-data-block span.b,
+.panchang-box-data-block .font-bold {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: var(--foreground);
+}
+
+.panchang-box-data-block span {
+  color: var(--foreground);
+}
+
+/* Hidden Sections */
+.panchang-data-additional-info.hide {
+  display: none;
+}
+
+/* Button Styling */
+.panchang-load-more-details .btn {
+  background-color: #f97316; /* orange-500 */
+  color: #fff;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.panchang-load-more-details .btn:hover {
+  background-color: #ea580c; /* orange-600 */
+}
+
+/* Responsive Images */
+.panchang-box-data-block img {
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}
+
+/* Panchangam Header Styles */
+.panchang-header {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.panchang-nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 1rem 0;
+}
+
+.panchang-nav li {
+  display: inline-block;
+  margin-right: 1.5rem;
+}
+
+.panchang-nav a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.panchang-nav a:hover {
+  color: white;
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.panchang-title h4 {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.025em;
+}
+
+.collapse-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease;
+}
+
+.collapse-header:hover {
+  background: white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#collapse-text {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .panchang-nav li {
+    margin-right: 1rem;
+  }
+  
+  .panchang-title h4 {
+    font-size: 1.1rem;
+  }
+  
+  .collapse-header {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}

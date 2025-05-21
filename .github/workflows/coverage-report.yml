@@ -29,10 +29,8 @@ jobs:
         run: |
           set -e
           yarn test:coverage || echo "⚠️ Tests failed, continuing to the report generation step"
-        continue-on-error: true
 
       - name: Save PR coverage
-        if: always()
         run: |
           mkdir -p pr-coverage
           if [ -f coverage/coverage-summary.json ]; then
