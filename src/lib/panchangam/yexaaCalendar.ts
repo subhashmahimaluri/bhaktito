@@ -2,6 +2,8 @@ import { YexaaLocalConstant } from './yexaaLocalConstant';
 import { YexaaPanchangImpl } from './yexaaPanchangImpl';
 import { YexaaSunMoonTimer } from './yexaaSunMoonTimer';
 import { YexaaCalculateFunc } from './yexaaCalculateFunc';
+import { getAyana, getDrikRitu, getTeluguYearName } from './getCalendarExtras';
+
 export class YexaaCalendar {
   calendar(
     yexaaConstant: YexaaLocalConstant,
@@ -102,6 +104,18 @@ export class YexaaCalendar {
     Ritu.ino = ritu;
     Ritu.name = yexaaConstant.Ritu.name[ritu];
     Ritu.name_en_UK = yexaaConstant.Ritu.name_en_UK[ritu];
+
+    const solarLongitude = yexaaPanchangImpl.fix360(yexaaPanchangImpl.sun(sunRise) + ayanamsaAtRise);
+
+    const isNewTeluguYearStarted = MoonMasa.ino === 0 && Tithi.ino === 0;
+    const teluguYearIndex = this.getTeluguYearIndex(dt.getFullYear(), isNewTeluguYearStarted);
+
+
+    // Get extras
+    const ayana = getAyana(solarLongitude);
+    const drikRitu = getDrikRitu(solarLongitude);
+    const teluguYear = getTeluguYearName(teluguYearIndex + 1);  
+
     return {
       Tithi,
       Paksha,
@@ -115,7 +129,28 @@ export class YexaaCalendar {
       Gana,
       Guna,
       Trinity,
+      Ayana: { name_en_IN: ayana },
+      DrikRitu: { name_en_IN: drikRitu },
+      TeluguYear: { name_en_IN: teluguYear },
     };
+  }
+
+  getSakaYear(date: Date): number {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    // Saka calendar starts on March 22 (or March 21 in leap years)
+    const isBeforeSakaStart =
+      (month < 3) || (month === 3 && day < 22);
+
+    return isBeforeSakaStart ? year - 79 - 1 : year - 79;
+  }
+
+  getTeluguYearIndex(currentYear: number, isNewYearStarted: boolean): number {
+    const baseYear = 1867;
+    const offset = isNewYearStarted ? 0 : -1;
+    return ((currentYear + offset) - baseYear + 60) % 60;
   }
 
   // get tithi in (1-15) Sukla and (16-30) Krushna

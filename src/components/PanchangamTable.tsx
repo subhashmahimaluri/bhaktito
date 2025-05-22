@@ -11,6 +11,8 @@ import { moonRiseSet, ITRFCoord } from '@/lib/moonRiseSet';
 
 const LAT_HYDERABAD = 17.385044;
 const LNG_HYDERABAD = 78.486671;
+const today = new Date();
+// const today = new Date("2026-03-20");
 
 interface PanchangamData {
   tithi?: string;
@@ -45,11 +47,16 @@ export default function PanchangamTable() {
   useEffect(() => {
     const calculatePanchangam = () => {
       try {
-        const today = new Date();
         const panchang = new YexaaPanchang();
 
         const panchangamCalendar = panchang.calendar(today, LAT_HYDERABAD, LNG_HYDERABAD);
         const panchangamCalculate = panchang.calculate(today);
+
+        console.log('panchangamCalendar', panchangamCalendar);
+
+        const tithiDates = panchang.getTithiDates(today.getFullYear(), 0, LAT_HYDERABAD, LNG_HYDERABAD);
+
+        console.log('tithiDates', tithiDates);
 
         const sunTimes = panchang.sunTimer(today, LAT_HYDERABAD, LNG_HYDERABAD);
 
@@ -91,7 +98,7 @@ export default function PanchangamTable() {
       {/* Date Information */}
       <div className="panchang-box-data-block panchang-data-day">
         <ol className="text-sm">
-          <li><span className="font-bold">Date</span> - <span>{formatFullDateWithWeekday(new Date())}</span></li>
+          <li><span className="font-bold">Date</span> - <span>{formatFullDateWithWeekday(today)}</span></li>
           <li><span className="font-bold">Vikram Samvat</span> - <span>Kalayukti 2082, Vaisakha 24</span></li>
           <li><span className="font-bold">Indian Civil Calendar</span> - <span>1947, Vaisakha 31</span></li>
           <li><span className="font-bold">Purnimanta Month</span> - <span>{panchangamData.moonMasa}</span></li>

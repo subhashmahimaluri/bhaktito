@@ -3,6 +3,7 @@ import { YexaaLocalConstant } from './yexaaLocalConstant';
 import { YexaaPkgConstants } from './yexaaPkgConstants';
 import { YexaaSunMoonTimer } from './yexaaSunMoonTimer';
 import { YexaaCalendar } from './yexaaCalendar';
+import { getTithiDates } from './getTithiDates';
 
 export class YexaaPanchang {
   private yexaaLocalConstant = new YexaaLocalConstant();
@@ -12,6 +13,10 @@ export class YexaaPanchang {
   private yexaaCalendar = new YexaaCalendar();
   calculate(dt: Date) {
     return this.yexaaCalculateFunc.calculate(dt, this.yexaaLocalConstant);
+  }
+
+  getTithiDates(year: number, tithiIno: number, lat: number, lng: number) {
+    return getTithiDates(year, tithiIno, lat, lng);
   }
 
   calendar(dt: Date, lat: number, lng: number, height?: number) {
@@ -29,12 +34,12 @@ export class YexaaPanchang {
     return this.yexaaSunMoonTimer.sunTimer(date, lat, lng, height);
   }
 
-  getYexaaConstant<C extends keyof yexaaLocalConstant, N extends keyof yexaaLocalConstant[C]>(category: C, name: N): yexaaLocalConstant[C][N] {
+  getYexaaConstant<C extends keyof YexaaLocalConstant, N extends keyof YexaaLocalConstant[C]>(category: C, name: N): YexaaLocalConstant[C][N] {
     return this.yexaaLocalConstant[category][name];
   }
 
-  setYexaaConstant<C extends keyof yexaaLocalConstant, N extends keyof yexaaLocalConstant[C]>(category: C, name: N, yexaalist: yexaaLocalConstant[C][N]) {
-    (this.yexaaLocalConstant[category] as Record<N, yexaaLocalConstant[C][N]>)[name] = yexaalist;
+  setYexaaConstant<C extends keyof YexaaLocalConstant, N extends keyof YexaaLocalConstant[C]>(category: C, name: N, yexaalist: YexaaLocalConstant[C][N]) {
+    (this.yexaaLocalConstant[category] as Record<N, YexaaLocalConstant[C][N]>)[name] = yexaalist;
   }
 
   getGanaMatched(brideIno: number, groomIno: number) {
