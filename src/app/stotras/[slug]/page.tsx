@@ -13,7 +13,7 @@ export default async function StotraPage({ params }: { params: { slug: string } 
   const jsonData = await fs.readFile(filePath, "utf-8");
   const { posts }: { posts: Stotra[] } = JSON.parse(jsonData);
 
-  const post = posts.find(p => p.url === params.slug);
+  const post = posts.find(p => p.url === params?.slug);
 
   if (!post) return notFound();
 
