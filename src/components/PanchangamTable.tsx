@@ -2,56 +2,84 @@
 
 import React, { useEffect, useState } from 'react';
 import { YexaaPanchang } from '../lib/panchangam';
-import { formatTimeIST } from './utils';
-import * as mrs from '@/lib/moonRiseSet';
+import {
+  formatFullDateWithWeekday,
+  formatTimeIST,
+  startEndDateFormat
+} from './utils';
+import { moonRiseSet, ITRFCoord } from '@/lib/moonRiseSet';
 
-type PanchangamItem = {
-  label: string;
-  value: string;
-};
+const LAT_HYDERABAD = 17.385044;
+const LNG_HYDERABAD = 78.486671;
+
+interface PanchangamData {
+  tithi?: string;
+  tithiTime?: string;
+  nakshatra?: string;
+  nakshatraTime?: string;
+  yoga?: string;
+  karana?: string;
+  yogaTime?: string;
+  karanaTime?: string;
+  moonMasa?: string;
+  masa?: string;
+  paksha?: string;
+  day?: string;
+}
+
+interface SunTime {
+  sunRise?: string;
+  sunSet?: string;
+}
+
+interface MoonTime {
+  rise?: Date;
+  set?: Date;
+}
 
 export default function PanchangamTable() {
-  const [panchangamData, setPanchangamData] = useState<PanchangamItem[]>([]);
-  const [sunTime, setSunTime] = useState<any>({});
-  const [moonTime, setMoonTime] = useState<any>({});
+  const [panchangamData, setPanchangamData] = useState<PanchangamData>({});
+  const [sunTime, setSunTime] = useState<SunTime>({});
+  const [moonTime, setMoonTime] = useState<MoonTime>({});
 
   useEffect(() => {
     const calculatePanchangam = () => {
       try {
         const today = new Date();
-        const latitude = 17.385044; // Hyderabad
-        const longitude = 78.486671;
+        const panchang = new YexaaPanchang();
 
-        const obj = new YexaaPanchang();
-        const p = obj.calendar(today, latitude, longitude);
+        const panchangamCalendar = panchang.calendar(today, LAT_HYDERABAD, LNG_HYDERABAD);
+        const panchangamCalculate = panchang.calculate(today);
 
-        let sunObj = obj.sunTimer(
-          today,
-          latitude,
-          longitude
-        );
+        const sunTimes = panchang.sunTimer(today, LAT_HYDERABAD, LNG_HYDERABAD);
 
-        let dateForMoon = new Date(today);
-         let dateForMoonFormat = new Date(dateForMoon.getFullYear(), dateForMoon.getMonth(), dateForMoon.getDate());
-        let groundpos = mrs.ITRFCoord.fromGeodeticDeg(latitude, longitude, 0);
-        const moonObj = mrs.moonRiseSet(dateForMoonFormat, groundpos);
+        const dateForMoon = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const groundPosition = ITRFCoord.fromGeodeticDeg(LAT_HYDERABAD, LNG_HYDERABAD, 0);
+        const moonTimes = moonRiseSet(dateForMoon, groundPosition);
 
-        setMoonTime(moonObj);
-
-        const data: PanchangamItem[] = [
-          { label: 'Tithi', value: p.Tithi?.name_en_IN || p.Tithi?.name_en_IN || 'N/A' },
-          { label: 'Nakshatra', value: p.Nakshatra?.name_en_IN || 'N/A' },
-          { label: 'Yoga', value: p.Yoga?.name_en_IN || 'N/A' },
-          { label: 'Karana', value: p.Karna?.name_en_IN || 'N/A' },
-        ];
+        const data: PanchangamData = {
+          tithi: panchangamCalculate.Tithi?.name_en_IN || '',
+          tithiTime: startEndDateFormat(panchangamCalculate.Tithi.start, panchangamCalculate.Tithi.end),
+          nakshatra: panchangamCalculate.Nakshatra?.name_en_IN || '',
+          nakshatraTime: startEndDateFormat(panchangamCalculate.Nakshatra.start, panchangamCalculate.Nakshatra.end),
+          yoga: panchangamCalculate.Yoga?.name_en_IN || '',
+          yogaTime: startEndDateFormat(panchangamCalculate.Yoga.start, panchangamCalculate.Yoga.end),
+          karana: panchangamCalculate.Karna?.name_en_IN || '',
+          karanaTime: startEndDateFormat(panchangamCalculate.Karna.start, panchangamCalculate.Karna.end),
+          moonMasa: panchangamCalendar.MoonMasa?.name_en_IN || '',
+          masa: panchangamCalendar.Masa?.name_en_IN || '',
+          paksha: panchangamCalculate.Paksha?.name_en_IN || '',
+          day: panchangamCalculate.Day?.name_en_UK || ''
+        };
 
         setPanchangamData(data);
-        setSunTime(sunObj);
+        setSunTime(sunTimes);
+        setMoonTime(moonTimes);
       } catch (error) {
         console.error("Error calculating Panchangam:", error);
         setSunTime({});
         setMoonTime({});
-        setPanchangamData([{ label: 'Error', value: 'Could not calculate' }]);
+        setPanchangamData({});
       }
     };
 
@@ -63,104 +91,67 @@ export default function PanchangamTable() {
       {/* Date Information */}
       <div className="panchang-box-data-block panchang-data-day">
         <ol className="text-sm">
-          <li>
-            <span className="font-bold">Vikram Samvat</span> - <span>Kalayukti 2082, Vaisakha 24</span>
-          </li>
-          <li>
-            <span className="font-bold">Indian Civil Calendar</span> - <span>1947, Vaisakha 31</span>
-          </li>
-          <li>
-            <span className="font-bold">Purnimanta Month</span> - <span>2082, Jyeshta 9</span>
-          </li>
-          <li>
-            <span className="font-bold">Amanta Month</span> - <span>2082, Vaisakha 24</span>
-          </li>
+          <li><span className="font-bold">Date</span> - <span>{formatFullDateWithWeekday(new Date())}</span></li>
+          <li><span className="font-bold">Vikram Samvat</span> - <span>Kalayukti 2082, Vaisakha 24</span></li>
+          <li><span className="font-bold">Indian Civil Calendar</span> - <span>1947, Vaisakha 31</span></li>
+          <li><span className="font-bold">Purnimanta Month</span> - <span>{panchangamData.moonMasa}</span></li>
+          <li><span className="font-bold">Amanta Month</span> - <span>{panchangamData.masa}</span></li>
         </ol>
       </div>
 
-      {/* Tithi Details */}
+      {/* Tithi */}
       <div className="panchang-box-data-block panchang-data-tithi">
         <span className="block font-bold">Tithi</span>
         <ol className="text-sm">
           <li>
-            <span className="font-bold">
-              Krishna Paksha Navami&nbsp;
-            </span>
-            &nbsp;-&nbsp;<span>May 21 04:55 AM – May 22 03:22 AM</span>
-          </li>
-          <li>
-            <span className="font-bold">
-              Krishna Paksha Dasami&nbsp;
-            </span>
-            &nbsp;-&nbsp;<span>May 22 03:22 AM – May 23 01:12 AM</span>
+            <span className="font-bold">{panchangamData.paksha} Paksha {panchangamData.tithi}</span>
+            &nbsp;-&nbsp;<span>{panchangamData.tithiTime}</span>
           </li>
         </ol>
       </div>
 
-      {/* Nakshatra Details */}
+      {/* Nakshatra */}
       <div className="panchang-box-data-block panchang-data-nakshatra">
         <span className="block font-bold">Nakshatra</span>
         <ol className="text-sm">
           <li>
             <span className="font-bold">
-              <a href="/astrology/nakshatra/satabhisha-nakshatra.htm">Shatabhisha</a>
+              <a href="/astrology/nakshatra/satabhisha-nakshatra.htm">{panchangamData.nakshatra}</a>
             </span>
-            &nbsp;-&nbsp;<span>May 20 07:32 PM – May 21 06:58 PM</span>
-          </li>
-          <li>
-            <span className="font-bold">
-              <a href="/astrology/nakshatra/purva-bhadrapada-nakshatra.htm">Purva Bhadrapada</a>
-            </span>
-            &nbsp;-&nbsp;<span>May 21 06:58 PM – May 22 05:47 PM</span>
+            &nbsp;-&nbsp;<span>{panchangamData.nakshatraTime}</span>
           </li>
         </ol>
       </div>
 
+      {/* Sun & Moon Timing */}
       <div className="panchang-box-data-block panchang-date">
-          <h4 className="gr-text-6 text-black block font-bold">Sun & Moon Timing</h4>
-          <ul className="list-unstyled gr-text-8">
-            <li><span className="font-bold">Sunrise</span> : {formatTimeIST(sunTime.sunRise)}</li>
-            <li><span className="font-bold">Sunset</span> : {formatTimeIST(sunTime.sunSet)}</li>
-            <li><span className="font-bold">Moonrise</span> : {formatTimeIST(moonTime.rise)}</li>
-            <li><span className="font-bold">Moonset</span> : {formatTimeIST(moonTime.set)}</li>
-          </ul>
-        </div>
+        <h4 className="gr-text-6 text-black block font-bold">Sun & Moon Timing</h4>
+        <ul className="list-unstyled gr-text-8">
+          <li><span className="font-bold">Sunrise</span> : {formatTimeIST(sunTime.sunRise)}</li>
+          <li><span className="font-bold">Sunset</span> : {formatTimeIST(sunTime.sunSet)}</li>
+          <li><span className="font-bold">Moonrise</span> : {formatTimeIST(moonTime.rise)}</li>
+          <li><span className="font-bold">Moonset</span> : {formatTimeIST(moonTime.set)}</li>
+        </ul>
+      </div>
 
-      {/* Karana Details */}
+      {/* Karana */}
       <div className="panchang-box-data-block panchang-data-karana">
         <span className="block font-bold">Karana</span>
         <ol className="text-sm">
           <li>
-            <span className="font-bold">Taitila</span> - <span>May 21 04:56 AM – May 21 04:13 PM</span>
-          </li>
-          <li>
-            <span className="font-bold">Garija</span> - <span>May 21 04:13 PM – May 22 03:22 AM</span>
-          </li>
-          <li>
-            <span className="font-bold">Vanija</span> - <span>May 22 03:22 AM – May 22 02:21 PM</span>
+            <span className="font-bold">{panchangamData.karana}</span>
+            &nbsp;-&nbsp;<span>{panchangamData.karanaTime}</span>
           </li>
         </ol>
       </div>
 
-      {/* Yoga Details */}
+      {/* Yoga */}
       <div className="panchang-box-data-block panchang-data-yoga">
         <span className="block font-bold">Yoga</span>
         <ol className="text-sm">
           <li>
-            <span className="font-bold">Vaidhruthi</span> - <span>May 21 02:50 AM – May 22 12:34 AM</span>
-          </li>
-          <li>
-            <span className="font-bold">Vishkambha</span> - <span>May 22 12:34 AM – May 22 09:49 PM</span>
-          </li>
-        </ol>
-      </div>
-
-      {/* Vara Details */}
-      <div className="panchang-box-data-block panchang-data-vaasara">
-        <span className="block font-bold">Vara</span>
-        <ol className="text-sm">
-          <li>
-            <span className="font-bold">Budhwar (Wednesday)</span>
+            <span className="font-bold">{panchangamData.yoga}</span>
+            &nbsp;-&nbsp;<span>{panchangamData.yogaTime}</span>
           </li>
         </ol>
       </div>
